@@ -184,8 +184,9 @@ html{scroll-behavior:smooth;scroll-padding-top:80px}
 	border:1px solid rgba(255,255,255,.06);
 	padding:28px;
 	border-radius:8px;
-	transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 	position:relative;
+	transform: translateY(0) scale(1);
 }
 
 .contact-item::before{
@@ -204,7 +205,7 @@ html{scroll-behavior:smooth;scroll-padding-top:80px}
 	background:rgba(255,255,255,.08);
 	border-color:rgba(240,164,26,0.2);
 	transform:translateY(-2px);
-	box-shadow:0 6px 20px rgba(0,0,0,0.15);
+	box-shadow:0 4px 15px rgba(0,0,0,0.1), 0 0 10px rgba(240,164,26,0.1);
 }
 
 .contact-item:hover::before{
@@ -292,21 +293,56 @@ html{scroll-behavior:smooth;scroll-padding-top:80px}
 
 /* Hero actions */
 .hero-actions{display:flex;gap:12px;justify-content:center;margin:12px 0 8px}
-.btn{display:inline-block;padding:12px 18px;border-radius:10px;font-weight:700;letter-spacing:.2px;transition:transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease;border:1px solid transparent}
-.btn:active{transform:translateY(0)}
-.btn:hover{transform:translateY(-2px)}
-.btn-primary{background:var(--brand);color:#0b1e33;border-color:rgba(255,255,255,.12);box-shadow:0 10px 30px rgba(240,164,26,.22)}
+.btn{
+	display:inline-block;
+	padding:12px 18px;
+	border-radius:10px;
+	font-weight:700;
+	letter-spacing:.2px;
+	transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+	border:1px solid transparent;
+	position:relative;
+	overflow:hidden;
+}
+.btn::before{
+	content:'';
+	position:absolute;
+	top:0;
+	left:-100%;
+	width:100%;
+	height:100%;
+	background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+	transition:left 0.6s ease;
+}
+.btn:active{transform:translateY(0) scale(0.98)}
+.btn:hover{
+	transform:translateY(-2px);
+}
+.btn:hover::before{
+	left:100%;
+}
+.btn-primary{
+	background:var(--brand);
+	color:#0b1e33;
+	border-color:rgba(255,255,255,.12);
+	box-shadow:0 10px 30px rgba(240,164,26,.22);
+}
 .btn-primary:hover{
 	background:var(--brand-dark);
-	box-shadow:0 14px 36px rgba(240,164,26,.28);
+	box-shadow:0 16px 40px rgba(240,164,26,.35);
 	text-shadow:0 2px 8px rgba(11,30,51,0.3);
 }
-.btn-ghost-light{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.28)}
+.btn-ghost-light{
+	background:rgba(255,255,255,.14);
+	color:#fff;
+	border-color:rgba(255,255,255,.28);
+}
 .btn-ghost-light:hover{
 	background:rgba(255,255,255,.22);
 	color:var(--brand);
 	text-shadow:0 2px 8px rgba(240,164,26,0.3);
 	border-color:var(--brand);
+	box-shadow:0 8px 25px rgba(240,164,26,0.2);
 }
 
 /* Content sections */
@@ -319,10 +355,11 @@ html{scroll-behavior:smooth;scroll-padding-top:80px}
 	border:1px solid rgba(255,255,255,.08);
 	padding:14px 16px;
 	border-radius:10px;
-	transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 	cursor:default;
 	position:relative;
 	overflow:hidden;
+	transform: translateY(0) scale(1);
 }
 .services li::before{
 	content:'';
@@ -331,19 +368,32 @@ html{scroll-behavior:smooth;scroll-padding-top:80px}
 	left:-100%;
 	width:100%;
 	height:100%;
-	background:linear-gradient(90deg, transparent, rgba(240,164,26,0.1), transparent);
+	background:linear-gradient(90deg, transparent, rgba(240,164,26,0.15), transparent);
 	transition:left 0.6s ease;
+}
+.services li::after{
+	content:'';
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	background:linear-gradient(135deg, rgba(240,164,26,0.05), transparent);
+	opacity:0;
+	transition:opacity 0.3s ease;
 }
 .services li:hover{
 	background:rgba(255,255,255,.1);
 	border-color:rgba(240,164,26,0.3);
-	transform:translateY(-4px);
-	box-shadow:0 8px 25px rgba(0,0,0,0.2), 0 0 20px rgba(240,164,26,0.1);
+	transform:translateY(-2px);
+	box-shadow:0 4px 15px rgba(0,0,0,0.1), 0 0 10px rgba(240,164,26,0.1);
 	color:var(--brand);
-	text-shadow:0 2px 8px rgba(240,164,26,0.3);
 }
 .services li:hover::before{
 	left:100%;
+}
+.services li:hover::after{
+	opacity:1;
 }
 
 /* Footer */
@@ -450,13 +500,101 @@ html{scroll-behavior:smooth;scroll-padding-top:80px}
 	}
 }
 
-/* Apply entrance animations */
+/* Subtle Animation System - Inspired by BS Tecnologia */
+/* Base animation classes for scroll-triggered animations */
+.animate-on-scroll {
+	opacity: 0;
+	transform: translateY(20px);
+	transition: all 0.6s ease-out;
+}
+
+.animate-on-scroll.animate-in {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+/* Different animation directions - more subtle */
+.animate-slide-left {
+	opacity: 0;
+	transform: translateX(-20px);
+	transition: all 0.6s ease-out;
+}
+
+.animate-slide-left.animate-in {
+	opacity: 1;
+	transform: translateX(0);
+}
+
+.animate-slide-right {
+	opacity: 0;
+	transform: translateX(20px);
+	transition: all 0.6s ease-out;
+}
+
+.animate-slide-right.animate-in {
+	opacity: 1;
+	transform: translateX(0);
+}
+
+.animate-scale-in {
+	opacity: 0;
+	transform: scale(0.95);
+	transition: all 0.6s ease-out;
+}
+
+.animate-scale-in.animate-in {
+	opacity: 1;
+	transform: scale(1);
+}
+
+.animate-fade-in {
+	opacity: 0;
+	transition: all 0.6s ease-out;
+}
+
+.animate-fade-in.animate-in {
+	opacity: 1;
+}
+
+/* Staggered animations for lists and grids - more subtle */
+.animate-stagger > * {
+	opacity: 0;
+	transform: translateY(15px);
+	transition: all 0.5s ease-out;
+}
+
+.animate-stagger.animate-in > * {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.animate-stagger > *:nth-child(1) { transition-delay: 0.05s; }
+.animate-stagger > *:nth-child(2) { transition-delay: 0.1s; }
+.animate-stagger > *:nth-child(3) { transition-delay: 0.15s; }
+.animate-stagger > *:nth-child(4) { transition-delay: 0.2s; }
+.animate-stagger > *:nth-child(5) { transition-delay: 0.25s; }
+.animate-stagger > *:nth-child(6) { transition-delay: 0.3s; }
+.animate-stagger > *:nth-child(7) { transition-delay: 0.35s; }
+.animate-stagger > *:nth-child(8) { transition-delay: 0.4s; }
+.animate-stagger > *:nth-child(9) { transition-delay: 0.45s; }
+
+/* Apply entrance animations to hero elements - more subtle */
 .hero-title{
-	animation:fadeInUp 0.8s ease-out 0.2s both;
+	animation:fadeInUp 0.6s ease-out 0.1s both;
+	position: relative;
 }
 
 .hero-subtitle{
-	animation:fadeInUp 0.8s ease-out 0.4s both;
+	animation:fadeInUp 0.6s ease-out 0.2s both;
+}
+
+.hero-actions{
+	animation:fadeInUp 0.6s ease-out 0.3s both;
+}
+
+/* Subtle hero title enhancement */
+.hero-title {
+	position: relative;
 }
 
 /* Hover highlight for the two Gs in the hero title */
@@ -464,37 +602,31 @@ html{scroll-behavior:smooth;scroll-padding-top:80px}
 .g-accent-ch{transition:color .25s ease, text-shadow .25s ease}
 .hero-title:hover .g-accent-ch{color:var(--brand);text-shadow:0 2px 10px rgba(240,164,26,0.35)}
 
-
-.content h2{
-	animation:fadeInLeft 0.6s ease-out both;
+/* Subtle content section animations */
+.content {
+	position: relative;
 }
 
-.services{
-	animation:fadeInUp 0.8s ease-out both;
+.content h2 {
+	animation: fadeInLeft 0.5s ease-out both;
 }
 
-.contact-title{
-	animation:fadeInLeft 0.6s ease-out both;
+.content p {
+	animation: fadeInUp 0.5s ease-out 0.1s both;
 }
 
-.contact-grid{
-	animation:fadeInUp 0.8s ease-out both;
+/* Services section with staggered animation */
+.services {
+	animation: fadeInUp 0.5s ease-out both;
 }
 
-.contact-item:nth-child(1){
-	animation:fadeInUp 0.8s ease-out 0.1s both;
+/* Contact section animations */
+.contact-title {
+	animation: fadeInLeft 0.5s ease-out both;
 }
 
-.contact-item:nth-child(2){
-	animation:fadeInUp 0.8s ease-out 0.2s both;
-}
-
-.contact-item:nth-child(3){
-	animation:fadeInUp 0.8s ease-out 0.3s both;
-}
-
-.contact-item:nth-child(4){
-	animation:fadeInUp 0.8s ease-out 0.4s both;
+.contact-grid {
+	animation: fadeInUp 0.5s ease-out both;
 }
 
 /* Enhanced focus states for accessibility */

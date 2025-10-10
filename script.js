@@ -30,6 +30,57 @@ document.addEventListener('DOMContentLoaded',function(){
 		});
 	},{threshold:.6});
 	sections.forEach(sec=>observer.observe(sec));
+
+	// Enhanced Animation System with Intersection Observer
+	const animateElements = document.querySelectorAll('.animate-on-scroll, .animate-slide-left, .animate-slide-right, .animate-scale-in, .animate-fade-in, .animate-stagger');
+	
+	const animationObserver = new IntersectionObserver((entries) => {
+		entries.forEach(entry => {
+			if (entry.isIntersecting) {
+				entry.target.classList.add('animate-in');
+				
+				// For staggered animations, trigger children animations
+				if (entry.target.classList.contains('animate-stagger')) {
+					const children = entry.target.children;
+					Array.from(children).forEach((child, index) => {
+						setTimeout(() => {
+							child.style.opacity = '1';
+							child.style.transform = 'translateY(0)';
+						}, index * 50); // 50ms delay between each child - more subtle
+					});
+				}
+			}
+		});
+	}, {
+		threshold: 0.2,
+		rootMargin: '0px 0px -20px 0px'
+	});
+
+	// Observe all animation elements
+	animateElements.forEach(el => {
+		animationObserver.observe(el);
+	});
+
+	// Subtle scroll effects - removed parallax for better performance
+
+	// Smooth reveal animation for content sections
+	const contentSections = document.querySelectorAll('.content');
+	const sectionObserver = new IntersectionObserver((entries) => {
+		entries.forEach(entry => {
+			if (entry.isIntersecting) {
+				entry.target.classList.add('flash-arrive');
+				setTimeout(() => {
+					entry.target.classList.remove('flash-arrive');
+				}, 900);
+			}
+		});
+	}, {
+		threshold: 0.3
+	});
+
+	contentSections.forEach(section => {
+		sectionObserver.observe(section);
+	});
 });
 
 // Ensure page always starts at top when loaded or refreshed
