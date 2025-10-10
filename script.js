@@ -37,23 +37,26 @@ document.addEventListener('DOMContentLoaded',function(){
 	const animationObserver = new IntersectionObserver((entries) => {
 		entries.forEach(entry => {
 			if (entry.isIntersecting) {
-				entry.target.classList.add('animate-in');
+				// Add a small delay before starting animation for more elegance
+				setTimeout(() => {
+					entry.target.classList.add('animate-in');
+				}, 100);
 				
-				// For staggered animations, trigger children animations
+				// For staggered animations, trigger children animations with longer delays
 				if (entry.target.classList.contains('animate-stagger')) {
 					const children = entry.target.children;
 					Array.from(children).forEach((child, index) => {
 						setTimeout(() => {
 							child.style.opacity = '1';
 							child.style.transform = 'translateY(0)';
-						}, index * 50); // 50ms delay between each child - more subtle
+						}, 200 + (index * 150)); // 200ms base delay + 150ms between each child
 					});
 				}
 			}
 		});
 	}, {
-		threshold: 0.2,
-		rootMargin: '0px 0px -20px 0px'
+		threshold: 0.15,
+		rootMargin: '0px 0px -50px 0px'
 	});
 
 	// Observe all animation elements
